@@ -1,6 +1,5 @@
 const fs = require('fs');
-const { text } = require('express');
-const { create } = require('domain');
+const crypto = require('crypto');
 
 //* Shorthand functions are methods
 
@@ -21,7 +20,7 @@ class UserRepository {
     }
   }
 
-  // Get all content in file
+  // Get all users in file
   async getAll() {
     // Open the file and parse into json file
     return JSON.parse(
@@ -31,7 +30,10 @@ class UserRepository {
     );
   }
 
+  // Create new a new user
   async create(attrs) {
+    attrs.id = this.randomId();
+
     // Store all file contents
     const records = await this.getAll();
     records.push(attrs);
@@ -46,6 +48,11 @@ class UserRepository {
       this.filename,
       JSON.stringify(records, null, 2)
     );
+  }
+
+  // Create Random for new user
+  randomId() {
+    return crypto.randomBytes(4).toString('hex');
   }
 }
 
