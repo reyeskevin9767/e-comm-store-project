@@ -1,5 +1,8 @@
 const fs = require('fs');
 const { text } = require('express');
+const { create } = require('domain');
+
+//* Shorthand functions are methods
 
 class UserRepository {
   constructor(filename) {
@@ -27,10 +30,21 @@ class UserRepository {
       })
     );
   }
+
+  async create(attrs) {
+    // Store all file contents
+    const records = await this.getAll();
+    records.push(attrs);
+
+    // Update file with new records
+    await fs.promises.writeFile(this.filename, JSON.stringify(records));
+  }
 }
 
 const test = async () => {
   const repo = new UserRepository('users.json');
+
+  await repo.create({ email: 'test@test.com', password: 'password' });
 
   const users = await repo.getAll();
 
