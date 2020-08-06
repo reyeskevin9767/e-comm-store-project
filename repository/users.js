@@ -56,6 +56,13 @@ class UserRepository {
     return records.find((record) => record.id === id);
   }
 
+  // Delete user
+  async delete(id) {
+    const records = await this.getAll();
+    const filteredRecords = records.filter((record) => record.id !== id);
+    await this.writeAll(filteredRecords);
+  }
+
   // Create random id for new user
   randomId() {
     return crypto.randomBytes(4).toString('hex');
@@ -65,9 +72,7 @@ class UserRepository {
 const test = async () => {
   const repo = new UserRepository('users.json');
 
-  const user = await repo.getOne('9ef04afdadcba')
-
-  console.log(user);
+  const user = await repo.delete('226fc0ba');
 };
 
 test();
