@@ -50,7 +50,13 @@ class UserRepository {
     );
   }
 
-  // Create Random for new user
+  // Find one user by id
+  async getOne(id) {
+    const records = await this.getAll();
+    return records.find((record) => record.id === id);
+  }
+
+  // Create random id for new user
   randomId() {
     return crypto.randomBytes(4).toString('hex');
   }
@@ -59,11 +65,9 @@ class UserRepository {
 const test = async () => {
   const repo = new UserRepository('users.json');
 
-  await repo.create({ email: 'test@test.com', password: 'password' });
+  const user = await repo.getOne('9ef04afdadcba')
 
-  const users = await repo.getAll();
-
-  console.log(users);
+  console.log(user);
 };
 
 test();
