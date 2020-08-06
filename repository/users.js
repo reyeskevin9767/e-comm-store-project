@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { text } = require('express');
 
 class UserRepository {
   constructor(filename) {
@@ -16,6 +17,27 @@ class UserRepository {
       fs.writeFileSync(this.filename, '[]');
     }
   }
+
+  // Get all content in file
+  async getAll() {
+    // Open the file
+    const contents = await fs.promises.readFile(this.filename, {
+      encoding: 'utf8',
+    });
+
+    //read its contents
+    console.log(contents);
+
+    // parse the contents
+
+    //return the parsed data
+  }
 }
 
-const repo = new UserRepository('users.json');
+const test = async () => {
+  const repo = new UserRepository('users.json');
+
+  await repo.getAll();
+};
+
+test();
