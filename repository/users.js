@@ -79,6 +79,28 @@ class UserRepository {
     await this.writeAll(records);
   }
 
+  // Filters through users
+  async getOneBy(filters) {
+    const records = await this.getAll();
+
+    // Loop through all users
+    for (let record of records) {
+      let found = true;
+
+      // Compare filters with user data
+      for (let key in filters) {
+        if (record[key] !== filters[key]) {
+          found = false;
+        }
+      }
+
+      // Return record that matches filter
+      if (found) {
+        return record;
+      }
+    }
+  }
+
   // Create random id for new user
   randomId() {
     return crypto.randomBytes(4).toString('hex');
@@ -88,7 +110,9 @@ class UserRepository {
 const test = async () => {
   const repo = new UserRepository('users.json');
 
-  await repo.update('fd7aadfa6eea', { password: 'password' });
+  const user = await repo.getOneBy({ email: 'test@test.com' });
+
+  console.log(user);
 };
 
 test();
