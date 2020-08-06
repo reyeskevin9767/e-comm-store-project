@@ -1,5 +1,6 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const { timeStamp } = require('console');
 
 //* Shorthand functions are methods
 
@@ -63,6 +64,21 @@ class UserRepository {
     await this.writeAll(filteredRecords);
   }
 
+  // Update user
+  async update(id, attrs) {
+    const records = await this.getAll();
+    const record = records.find((record) => record.id === id);
+
+    if (!record) {
+      throw new Error(`Record with id ${id} not found`);
+    }
+
+    // Copy attrs to record
+    Object.assign(record, attrs);
+
+    await this.writeAll(records);
+  }
+
   // Create random id for new user
   randomId() {
     return crypto.randomBytes(4).toString('hex');
@@ -72,7 +88,7 @@ class UserRepository {
 const test = async () => {
   const repo = new UserRepository('users.json');
 
-  const user = await repo.delete('226fc0ba');
+  await repo.update('fd7aadfa6eea', { password: 'password' });
 };
 
 test();
