@@ -1,0 +1,24 @@
+{
+  "name": "e-comm-store-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reyeskevin9767/e-comm-store-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reyeskevin9767/e-comm-store-project/issues"
+  },
+  "homepage": "https://github.com/reyeskevin9767/e-comm-store-project#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
