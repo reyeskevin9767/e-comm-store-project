@@ -34,3 +34,10 @@ app.post('/', (req, res) => {
 app.listen(3000, () => {
   console.log('Listening');
 });
+
+//* NOT MEANT FOR PRODUCTION USE
+//* Express Server -> Data Store(users, products) -> Hard Drive (products, users)
+//* Problems with using storing data on hard drive
+//* Will error if we try to open/write to the same file twice at the same time
+//* Won't work if we have multiple servers running on different machines
+//* We have to write to the File System every time we want to update some data
