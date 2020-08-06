@@ -1,11 +1,15 @@
-//* Create a web server
+//* Creates web server
 const express = require('express');
+
+const bodyParser = require('body-parser');
 const app = express();
+
+//* All router handles will use middleware to parse data
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //* Route Handler - Get Request
 // POST configs form for the browser
-// Browser takes all the information
-// And send a post request to the same route
+// to send a post request will all the data
 app.get('/', (req, res) => {
   res.send(`
     <div>
@@ -19,28 +23,9 @@ app.get('/', (req, res) => {
   `);
 });
 
-//* Middleware for parsing data
-const bodyParser = (req, res, next) => {
-  if (req.method === 'POST') {
-    req.on('data', (data) => {
-      const parsed = data.toString('utf8').split('&');
-      const formData = {};
-      for (let pair of parsed) {
-        const [key, value] = pair.split('=');
-        formData[key] = value;
-      }
-      req.body = formData;
-      next();
-    });
-  } else {
-    next();
-  }
-};
-
 //* Route Handler - Post Request
-// Information is stored into req.body assigned to their name attribute
-app.post('/', bodyParser, (req, res) => {
-  // Get Access to email, password, and password Confirmation
+// All the data is store in req.body
+app.post('/', (req, res) => {
   console.log(req.body);
   res.send(`Account Created`);
 });
