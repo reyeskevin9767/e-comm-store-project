@@ -1,5 +1,10 @@
+//* Basic html layout
+const layout = require('../layout');
+
+//* HTML of signup
 module.exports = ({ req }) => {
-  return `
+  return layout({
+    content: `
   <div>
   Your id is ${req.session.userId}
     <form method="POST">
@@ -9,5 +14,6 @@ module.exports = ({ req }) => {
       <button>Sign Up</button>
     </form>
   </div>
-  `;
+  `,
+  });
 };
