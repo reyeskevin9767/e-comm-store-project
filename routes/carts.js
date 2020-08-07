@@ -15,9 +15,21 @@ router.post('/cart/products', async (req, res) => {
     // get cart from repository
     cart = await cartsRepo.getOne(req.session.cartId);
   }
-  console.log(cart);
-  // Either increment quantity for exisiting product
-  // Or Add  product to items array
+
+  // Find product in cart
+  const exisitingItem = cart.items.find(
+    (item) => item.id === req.body.productId
+  );
+
+  if (exisitingItem) {
+    // increment quantity and save cart
+    exisitingItem.quantity++;
+  } else {
+    // ad new product id to items array
+    cart.items.push({ id: req.body.productId, quantity: 1 });
+  }
+
+  await cartsRepo.update(cart.id, { items: cart.items });
 
   res.send('Product Addded To Cart');
 });
