@@ -4,6 +4,8 @@ const usersRepo = require('../../repositories/users');
 module.exports = {
   // Assign Sanitization and Validation
   // Each Validation results in a function
+  requireTitle: check('title').trim().isLength({ min: 5, max: 40 }),
+  requirePrice: check('price').trim().toFloat().isFloat({ min: 1 }),
   requireEmail: check('email')
     .trim()
     .normalizeEmail()
@@ -48,7 +50,10 @@ module.exports = {
       if (!user) {
         throw new Error('Invalid Password');
       }
-      const validPassword = await usersRepo.comparePasswords(user.password, password);
+      const validPassword = await usersRepo.comparePasswords(
+        user.password,
+        password
+      );
 
       if (!validPassword) {
         throw new Error('Invalid Password');
