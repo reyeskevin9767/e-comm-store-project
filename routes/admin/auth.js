@@ -7,6 +7,8 @@ const {
   requireEmail,
   requirePassword,
   requirePasswordConfirmation,
+  requireEmailExists,
+  requireValidPasswordForUser,
 } = require('./validators');
 
 // Similar to creating another app.
@@ -32,7 +34,7 @@ router.post(
     }
 
     // All the data is store in req.body
-    const { email, password, passwordConfirmation } = req.body;
+    const { email, password } = req.body;
 
     // Create A User
     const user = await usersRepo.create({ email, password });
@@ -58,37 +60,14 @@ router.get('/signin', (req, res) => {
 //* Post Route - Signin
 router.post(
   '/signin',
-  [
-    check('email')
-      .trim()
-      .normalizeEmail()
-      .isEmail()
-      .withMessage('Must Provide A Valid Email')
-      .custom(async (email) => {
-        const user = await usersRepo.getOneBy({ email });
-        if (!user) {
-          throw new Error('Email Not Found!');
-        }
-      }),
-    check('password').trim(),
-  ],
+  [requireEmailExists, requireValidPasswordForUser],
   async (req, res) => {
     const errors = validationResult(req);
     console.log(errors);
-    
-    const { email, password } = req.body;
+
+    const { email } = req.body;
 
     const user = await usersRepo.getOneBy({ email });
-
-    if (!user) {
-      return res.send('Email Not Found');
-    }
-
-    const validPassword = await comparePasswords(user.password, password);
-
-    if (!validPassword) {
-      return res.send('Invalid Password');
-    }
 
     req.session.userId = user.id;
 

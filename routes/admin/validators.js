@@ -30,4 +30,28 @@ module.exports = {
     .trim()
     .isLength({ min: 4, max: 20 })
     .withMessage('Must be between 4 and 20 characters'),
+  requireEmailExists: check('email')
+    .trim()
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('Must Provide A Valid Email')
+    .custom(async (email) => {
+      const user = await usersRepo.getOneBy({ email });
+      if (!user) {
+        throw new Error('Email Not Found!');
+      }
+    }),
+  requireValidPasswordForUser: check('password')
+    .trim()
+    .custom(async (password, { req }) => {
+      const user = await usersRepo.getOneBy({ email: req.body.email });
+      if (!user) {
+        throw new Error('Invalid Password');
+      }
+      const validPassword = await usersRepo.comparePasswords(user.password, password);
+
+      if (!validPassword) {
+        throw new Error('Invalid Password');
+      }
+    }),
 };
