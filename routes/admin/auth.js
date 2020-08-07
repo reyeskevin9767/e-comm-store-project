@@ -1,24 +1,15 @@
 const express = require('express');
 const usersRepo = require('../../repositories/users');
-
+const signupTemplate = require('../../views/admin/auth/signup');
+const signinTemplate = require('../../views/admin/auth/signin');
 // Similar to creating another app.
 const router = express.Router();
 
 //* Get Route - Signup
 router.get('/signup', (req, res) => {
-  // POST configs form for the browser
+  // POST configs form for the browser 
   // to send a post request will all the data
-  res.send(`
-    <div>
-    Your id is ${req.session.userId}
-      <form method="POST">
-        <input name="email" placeholder="email" />
-        <input name= "password" placeholder="password" />
-        <input name= "passwordConfirmation" placeholder="password confirmation" />
-        <button>Sign Up</button>
-      </form>
-    </div>
-  `);
+  res.send(signupTemplate({ req }));
 });
 
 //* Post Route - Signup
@@ -55,19 +46,11 @@ router.get('/signout', (req, res) => {
 //* Get Route - Signin
 router.get('/signin', (req, res) => {
   // User signs in
-  res.send(`
-  <div>
-    <form method="POST">
-      <input name="email" placeholder="email" />
-      <input name= "password" placeholder="password" />
-      <button>Sign In</button>
-    </form>
-  </div>
-  `);
+  res.send(signinTemplate());
 });
 
 //* Post Route - Signin
-// Processes user signin form
+// Process user signin form
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
 
