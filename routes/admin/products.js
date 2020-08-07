@@ -34,7 +34,7 @@ router.post(
 
     // Save into products.json
     await productsRepo.create({ title, price, image });
-    res.send('submitted');
+    res.redirect('/admin/products');
   }
 );
 
