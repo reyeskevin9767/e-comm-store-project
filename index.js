@@ -1,6 +1,7 @@
 //* Creates web server
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 const usersRepo = require('./repository/users');
 
 const app = express();
@@ -8,12 +9,20 @@ const app = express();
 //* All router handles will use middleware to parse data
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//* Use cookies to have unique users
+app.use(
+  cookieSession({
+    keys: ['adfd2342f323243dsfay789784r2d'],
+  })
+);
+
 //* Route Handler - Get Request
 // POST configs form for the browser
 // to send a post request will all the data
 app.get('/', (req, res) => {
   res.send(`
     <div>
+    Your id is ${req.session.userId}
       <form method="POST">
         <input name="email" placeholder="email" />
         <input name= "password" placeholder="password" />
@@ -38,6 +47,12 @@ app.post('/', async (req, res) => {
   if (password !== passwordConfirmation) {
     return res.send('Password must match');
   }
+
+  // Create A User
+  const user = await usersRepo.create({ email, password });
+
+  // Store the user's id in users cookie
+  req.session.userId = user.id;
 
   res.send(`Account Created`);
 });

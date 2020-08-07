@@ -41,6 +41,8 @@ class UserRepository {
 
     // Update JSON file
     await this.writeAll(records);
+
+    return attrs;
   }
 
   // Update file with new records
@@ -108,4 +110,4 @@ class UserRepository {
 }
 
 //* Receive an instance of UsersRepository
-module.exports = new UserRepository('users.json')
+module.exports = new UserRepository('users.json');
