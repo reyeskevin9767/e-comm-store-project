@@ -13,6 +13,15 @@ module.exports = {
     .toFloat()
     .isFloat({ min: 1 })
     .withMessage('Must be greater than 1'),
+  requireImage: check('image').custom((image, { req }) => {
+    const file = req.file;
+    if (!file) {
+      throw new Error('Please upload file');
+    }
+    return (req, res, next) => {
+      next();
+    };
+  }),
   requireEmail: check('email')
     .trim()
     .normalizeEmail()
