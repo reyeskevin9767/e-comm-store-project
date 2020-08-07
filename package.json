@@ -13,11 +13,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "nodemonConfig": {
+    "ignore": [
+      "users.json"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/reyeskevin9767/e-comm-store-project/issues"
   },
   "homepage": "https://github.com/reyeskevin9767/e-comm-store-project#readme",
   "dependencies": {
+    "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.4"
   }

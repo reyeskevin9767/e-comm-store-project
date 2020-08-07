@@ -1,8 +1,11 @@
 const fs = require('fs');
 const crypto = require('crypto');
-const { timeStamp } = require('console');
+const util = require('util');
 
-//* Shorthand functions are methods
+// Developer Note: Shorthand functions are methods
+
+// Returns a promise
+const scrypt = util.promisify(crypto.scrypt);
 
 class UserRepository {
   constructor(filename) {
@@ -35,12 +38,27 @@ class UserRepository {
   async create(attrs) {
     attrs.id = this.randomId();
 
+    // Create salt and hashed password
+    const salt = crypto.randomBytes(8).toString('hex');
+    const buf = await scrypt(attrs.password, salt, 64);
+
     // Store all file contents
     const records = await this.getAll();
-    records.push(attrs);
+    const record = { ...attrs, password: `${buf.toString('hex')}.${salt}` };
+    records.push(record);
 
     // Update JSON file
     await this.writeAll(records);
+
+    return record;
+  }
+
+  // Compare database password to supplied password from signin
+  async comparePasswords(saved, supplied) {
+    const [hashed, salt] = saved.split('.');
+    const hashedSupplied = await scrypt(supplied, salt, 64);
+
+    return hashed === hashedSupplied.toString('hex');
   }
 
   // Update file with new records
@@ -108,4 +126,4 @@ class UserRepository {
 }
 
 //* Receive an instance of UsersRepository
-module.exports = new UserRepository('users.json')
+module.exports = new UserRepository('users.json');
