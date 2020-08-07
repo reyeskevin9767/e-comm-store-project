@@ -16,7 +16,8 @@
   "nodemonConfig": {
     "ignore": [
       "users.json",
-      "products.json"
+      "products.json",
+      "carts.json"
     ]
   },
   "bugs": {
