@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const usersRepo = require('./repository/users');
+const { urlencoded } = require('express');
 
 const app = express();
 
@@ -78,7 +79,25 @@ app.get('/signin', (req, res) => {
   `);
 });
 
-app.post('/sigin', async (req, res) => {});
+//* Post Request
+// Processes user signin form
+app.post('/signin', async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await usersRepo.getOneBy({ email });
+
+  if (!user) {
+    return res.send('Email Not Found');
+  }
+
+  if (user.password !== password) {
+    return res.send('Invalid password');
+  }
+
+  req.session.userId = user.id;
+
+  res.send('You are signed in!!!');
+});
 
 //* Start up server
 app.listen(3000, () => {
