@@ -1,8 +1,11 @@
 const fs = require('fs');
 const crypto = require('crypto');
-const { timeStamp } = require('console');
+const util = require('util');
 
-//* Shorthand functions are methods
+// Developer Note: Shorthand functions are methods
+
+// Returns a promise
+const scrypt = util.promisify(crypto.scrypt);
 
 class UserRepository {
   constructor(filename) {
@@ -35,14 +38,19 @@ class UserRepository {
   async create(attrs) {
     attrs.id = this.randomId();
 
+    // Create salt and hashed password
+    const salt = crypto.randomBytes(8).toString('hex');
+    const buf = await scrypt(attrs.password, salt, 64);
+
     // Store all file contents
     const records = await this.getAll();
-    records.push(attrs);
+    const record = { ...attrs, password: `${buf.toString('hex')}.${salt}` };
+    records.push(record);
 
     // Update JSON file
     await this.writeAll(records);
 
-    return attrs;
+    return record;
   }
 
   // Update file with new records
