@@ -7,7 +7,7 @@ const {
   requireEmail,
   requirePassword,
   requirePasswordConfirmation,
-} = requireEmail('./validators');
+} = require('./validators');
 
 // Similar to creating another app.
 const router = express.Router();
@@ -26,7 +26,10 @@ router.post(
   async (req, res) => {
     // Results from validation is sent to req
     const errors = validationResult(req);
-    console.log(errors);
+
+    if (!errors.isEmpty()) {
+      return res.send(signupTemplate({ req, errors }));
+    }
 
     // All the data is store in req.body
     const { email, password, passwordConfirmation } = req.body;

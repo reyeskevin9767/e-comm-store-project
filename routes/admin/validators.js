@@ -24,6 +24,7 @@ module.exports = {
       if (passwordConfirmation !== req.body.password) {
         throw new Error('Passwords Must Match');
       }
+      return true;
     }),
   requirePasswordConfirmation: check('passwordConfirmation')
     .trim()
