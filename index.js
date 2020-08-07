@@ -6,6 +6,7 @@ const authRouter = require('./routes/admin/auth');
 
 const app = express();
 
+app.use(express.static('public'));
 //* All router handles will use middleware to parse data
 app.use(bodyParser.urlencoded({ extended: true }));
 
