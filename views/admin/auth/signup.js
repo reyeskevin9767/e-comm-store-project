@@ -1,14 +1,6 @@
 //* Basic html layout
 const layout = require('../layout');
-
-//* Find the msg from errors at given property
-const getError = (errors, prop) => {
-  try {
-    return errors.mapped()[prop].msg;
-  } catch (err) {
-    return '';
-  }
-};
+const { getError } = require('../../helpers');
 
 //* HTML of signup
 module.exports = ({ req, errors }) => {
