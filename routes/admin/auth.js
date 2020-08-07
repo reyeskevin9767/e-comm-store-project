@@ -56,24 +56,44 @@ router.get('/signin', (req, res) => {
 });
 
 //* Post Route - Signin
-router.post('/signin', async (req, res) => {
-  const { email, password } = req.body;
+router.post(
+  '/signin',
+  [
+    check('email')
+      .trim()
+      .normalizeEmail()
+      .isEmail()
+      .withMessage('Must Provide A Valid Email')
+      .custom(async (email) => {
+        const user = await usersRepo.getOneBy({ email });
+        if (!user) {
+          throw new Error('Email Not Found!');
+        }
+      }),
+    check('password').trim(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    console.log(errors);
+    
+    const { email, password } = req.body;
 
-  const user = await usersRepo.getOneBy({ email });
+    const user = await usersRepo.getOneBy({ email });
 
-  if (!user) {
-    return res.send('Email Not Found');
+    if (!user) {
+      return res.send('Email Not Found');
+    }
+
+    const validPassword = await comparePasswords(user.password, password);
+
+    if (!validPassword) {
+      return res.send('Invalid Password');
+    }
+
+    req.session.userId = user.id;
+
+    res.send('You are signed in!!!');
   }
-
-  const validPassword = await comparePasswords(user.password, password);
-
-  if (!validPassword) {
-    return res.send('Invalid Password');
-  }
-
-  req.session.userId = user.id;
-
-  res.send('You are signed in!!!');
-});
+);
 
 module.exports = router;
