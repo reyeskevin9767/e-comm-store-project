@@ -3,14 +3,18 @@ const { check, validationResult } = require('express-validator');
 const usersRepo = require('../../repositories/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
+const {
+  requireEmail,
+  requirePassword,
+  requirePasswordConfirmation,
+} = requireEmail('./validators');
 
 // Similar to creating another app.
 const router = express.Router();
 
 //* Get Route - Signup
 router.get('/signup', (req, res) => {
-  // POST configs form for the browser
-  // to send a post request will all the data
+  // POST configs form for the browser to send a post request will all the data
   res.send(signupTemplate({ req }));
 });
 
@@ -18,33 +22,12 @@ router.get('/signup', (req, res) => {
 // Sanitization then Validation
 router.post(
   '/signup',
-  [
-    check('email')
-      .trim()
-      .normalizeEmail()
-      .isEmail()
-      .custom(async (email) => {
-        const existingUser = await usersRepo.getOneBy({ email });
-
-        if (existingUser) {
-          throw new Error('Email In Use');
-        }
-      }),
-    check('password')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .custom((passwordConfirmation, { req }) => {
-        if (passwordConfirmation !== req.body.password) {
-          throw new Error('Passwords Must Match');
-        }
-      }),
-    check('passwordConfirmation').trim().isLength({ min: 4, max: 20 }),
-  ],
+  [requireEmail, requirePassword, requirePasswordConfirmation],
   async (req, res) => {
     // Results from validation is sent to req
     const errors = validationResult(req);
     console.log(errors);
-    
+
     // All the data is store in req.body
     const { email, password, passwordConfirmation } = req.body;
 
@@ -60,19 +43,16 @@ router.post(
 
 //* Get Route - Signout
 router.get('/signout', (req, res) => {
-  // Sign user out
   req.session = null;
   res.send('You are logged out');
 });
 
 //* Get Route - Signin
 router.get('/signin', (req, res) => {
-  // User signs in
   res.send(signinTemplate());
 });
 
 //* Post Route - Signin
-// Process user signin form
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
 
