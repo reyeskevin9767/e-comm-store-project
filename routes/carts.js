@@ -33,7 +33,7 @@ router.post('/cart/products', async (req, res) => {
 
   await cartsRepo.update(cart.id, { items: cart.items });
 
-  res.send('Product Addded To Cart');
+  res.redirect('/cart');
 });
 
 //* Cart SHOW Route

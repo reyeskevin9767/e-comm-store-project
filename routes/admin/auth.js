@@ -43,7 +43,7 @@ router.post(
 //* Get Route - Signout
 router.get('/signout', (req, res) => {
   req.session = null;
-  res.send('You are logged out');
+  res.redirect('/');
 });
 
 //* Get Route - Signin
