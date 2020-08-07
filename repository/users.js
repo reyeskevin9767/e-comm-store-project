@@ -53,6 +53,14 @@ class UserRepository {
     return record;
   }
 
+  // Compare database password to supplied password from signin
+  async comparePasswords(saved, supplied) {
+    const [hashed, salt] = saved.split('.');
+    const hashedSupplied = await scrypt(supplied, salt, 64);
+
+    return hashed === hashedSupplied;
+  }
+
   // Update file with new records
   async writeAll(records) {
     await fs.promises.writeFile(
