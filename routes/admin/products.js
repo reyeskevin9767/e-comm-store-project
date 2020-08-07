@@ -17,13 +17,19 @@ router.get('/admin/products/new', (req, res) => {
   res.send(productsNewTemplate({}));
 });
 
+//* Products CREATE Route
+// Not The best way to save images, avoid in production applications
 router.post(
   '/admin/products/new',
   [requireTitle, requirePrice],
   upload.single('image'),
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
-    console.log(req.file);
+    const image = req.file.buffer.toString('base64');
+    const { title, price } = req.body;
+
+    // Save into products.json
+    await productsRepo.create({ title, price, image });
     res.send('submitted');
   }
 );

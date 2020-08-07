@@ -15,7 +15,8 @@
   "license": "ISC",
   "nodemonConfig": {
     "ignore": [
-      "users.json"
+      "users.json",
+      "products.json"
     ]
   },
   "bugs": {
