@@ -4,8 +4,24 @@ const usersRepo = require('../../repositories/users');
 module.exports = {
   // Assign Sanitization and Validation
   // Each Validation results in a function
-  requireTitle: check('title').trim().isLength({ min: 5, max: 40 }),
-  requirePrice: check('price').trim().toFloat().isFloat({ min: 1 }),
+  requireTitle: check('title')
+    .trim()
+    .isLength({ min: 5, max: 40 })
+    .withMessage('Must be between 5 and 40 characters'),
+  requirePrice: check('price')
+    .trim()
+    .toFloat()
+    .isFloat({ min: 1 })
+    .withMessage('Must be greater than 1'),
+  requireImage: check('image').custom((image, { req }) => {
+    const file = req.file;
+    if (!file) {
+      throw new Error('Please upload file');
+    }
+    return (req, res, next) => {
+      next();
+    };
+  }),
   requireEmail: check('email')
     .trim()
     .normalizeEmail()

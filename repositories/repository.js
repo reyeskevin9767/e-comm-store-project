@@ -26,7 +26,7 @@ module.exports = class Repository {
     records.push(attrs);
     await this.writeAll(records);
 
-    return record;
+    return attrs;
   }
 
   // Get all content in file
