@@ -1,3 +1,4 @@
+const PORT = process.env.PORT || 5000;
 //* Creates web server
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -27,7 +28,7 @@ app.use(adminProductsRouter);
 app.use(cartsRouter);
 
 //* Start up server
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log('Listening');
 });
 
