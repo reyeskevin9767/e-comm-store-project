@@ -27,6 +27,10 @@ app.use(productsRouter);
 app.use(adminProductsRouter);
 app.use(cartsRouter);
 
+//* Different Urls
+app.get('*', function (req, res) {
+  res.redirect('/');
+});
 //* Start up server
 app.listen(PORT, () => {
   console.log('Listening');
