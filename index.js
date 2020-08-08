@@ -27,8 +27,16 @@ app.use(adminProductsRouter);
 app.use(cartsRouter);
 
 //* Start up server
-app.listen(3000, () => {
-  console.log('Listening');
+// app.listen(3000, () => {
+//   console.log('Listening');
+// });
+
+const port = 5000;
+
+// Listen on port 5000
+app.listen(port, () => {
+  console.log(`Server is booming on port 5000
+Visit http://localhost:5000`);
 });
 
 //* NOT MEANT FOR PRODUCTION USE
