@@ -43,7 +43,16 @@
     "id": "74ead569"
   },
   {
-    "items": [],
+    "items": [
+      {
+        "id": "84d23150",
+        "quantity": 1
+      },
+      {
+        "id": "a8f3ec8c",
+        "quantity": 1
+      }
+    ],
     "id": "b9b2718d"
   }
 ]
