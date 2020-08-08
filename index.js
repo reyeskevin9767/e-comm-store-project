@@ -1,4 +1,4 @@
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 //* Creates web server
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -27,6 +27,10 @@ app.use(productsRouter);
 app.use(adminProductsRouter);
 app.use(cartsRouter);
 
+//* Different Urls
+app.get('*', function (req, res) {
+  res.redirect('/');
+});
 //* Start up server
 app.listen(PORT, () => {
   console.log('Listening');

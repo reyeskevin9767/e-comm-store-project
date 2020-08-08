@@ -45,26 +45,29 @@ router.get('/cart', async (req, res) => {
 
   const cart = await cartsRepo.getOne(req.session.cartId);
 
-  for (let item of cart.items) {
-    const product = await productsRepo.getOne(item.id);
+  try {
+    for (let item of cart.items) {
+      const product = await productsRepo.getOne(item.id);
 
-    item.product = product;
+      item.product = product;
+    }
+  } catch {
+    res.redirect('/');
   }
 
   res.send(cartShowTemplate({ items: cart.items }));
 });
 
 //* Cart DELETE Route
+// Receive a post request to delete an item from cart
 router.post('/cart/products/delete', async (req, res) => {
   const { itemId } = req.body;
   const cart = await cartsRepo.getOne(req.session.cartId);
-
   const items = cart.items.filter((item) => item.id !== itemId);
 
   await cartsRepo.update(req.session.cartId, { items });
 
   res.redirect('/cart');
 });
-// Receive a post request to delete an item from cart
 
 module.exports = router;

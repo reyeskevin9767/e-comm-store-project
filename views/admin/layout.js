@@ -9,7 +9,7 @@ module.exports = ({ content }) => {
         <title>Shop</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
         <link href="/css/main.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"></link>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
       </head>
 
       <body class="admin">
@@ -25,6 +25,9 @@ module.exports = ({ content }) => {
                 <div class="navbar-buttons">
                   <div class="navbar-item">
                     <a href="/admin/products"><i class="fa fa-star"></i> Products</a>
+                  </div>
+                  <div class="navbar-item">
+                    <a href="/"><i class="fa fa-star"></i>Shop Products</a>
                   </div>
                 </div>
               </div>
