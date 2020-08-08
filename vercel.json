@@ -1,4 +1,10 @@
 {
   "version": 2,
-  "builds": [{ "src": "index.js", "use": "@now/node-server" }]
+  "builds": [
+    { "src": "index.js", "use": "@now/node-server" },
+    { "src": "package.json", "use": "@vercel/next" },
+    { "src": "carts.json", "use": "@vercel/next" },
+    { "src": "products.json", "use": "@vercel/next" },
+    { "src": "users.json", "use": "@vercel/next" }
+  ]
 }
